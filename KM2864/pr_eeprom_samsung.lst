@@ -1,0 +1,180 @@
+0000-                  5               .sf PR_EEPROM_SAMSUNG.sym
+0000-                  6               .in ca80.inc
+0000-            I     1
+00E0-            I     2       USER8255        .eq             $E0
+0000-            I     3       PA                  .eq         0
+0001-            I     4       PB                  .eq         1
+0002-            I     5       PC                  .eq         2
+0003-            I     6       CTRL              .eq           3
+0000-            I     7             ;
+0000-            I     8             ;LICZNIKI PROGRAMOWE
+0000-            I     9             ;
+FFE8-            I    10       LCI:      .eq $FFE8
+FFE9-            I    11       SYG:      .eq $FFE9
+FFEA-            I    12       TIME:     .eq $FFEA             ; Licznik binarny %256 (liczy w dó³) co 2 ms
+0000-            I    13             ;
+0000-            I    14             ;ZEGAR CZASU RZECZYWISTEGO
+0000-            I    15             ;
+FFEB-            I    16       MSEK:     .eq $FFEB             ; <0, 4>
+FFEC-            I    17       SETSEK:   .eq $FFEC             ; <0, 99> setne sekundy
+FFED-            I    18       SEK:      .eq $FFED             ; <0, 59> sekundy
+FFEE-            I    19       MIN:      .eq $FFEE             ; <0, 59> minuty
+FFEF-            I    20       GODZ:     .eq $FFEF             ; <0, 23> godziny
+FFF0-            I    21       DNITYG:   .eq $FFF0             ; <7, 6, 5, 4, 3, 2, 1>
+FFF1-            I    22       DNIM:     .eq $FFF1             ; <1 ... > dni miesi¹ca
+FFF2-            I    23       MIES:     .eq $FFF2             ; <1, 12> miesi¹ce
+FFF3-            I    24       LATA:     .eq $FFF3             ; <0, 99> rok
+0000-            I    25             ;
+0000-            I    26                               ;       BUFOR WYŒWIETLACZA
+0000-            I    27             ;
+FFF7-            I    28       CYF0        .eq $FFF7
+FFF8-            I    29       CYF1        .eq $FFF8
+FFF9-            I    30       CYF2        .eq $FFF9
+FFFA-            I    31       CYF3        .eq $FFFA
+FFFB-            I    32       CYF4        .eq $FFFB
+FFFC-            I    33       CYF5        .eq $FFFC
+FFFD-            I    34       CYF6        .eq $FFFD
+FFFE-            I    35       CYF7        .eq $FFFE
+0000-            I    36             ;
+0000-            I    37             ; PROCEDURY SYSTEMOWE
+0000-            I    38             ;
+0000-            I    39             ; WYŒWIETLACZ
+0000-            I    40             ;
+01AB-            I    41       COM           .eq       $01AB   ; COM - pokazuje znak 7-seg z rejestru C
+01AC-            I    42       COM1      .eq $01AC ; COM1 - pokazuje znak 7-seg z rejestru C bez zmiany PWYS
+0010-            I    43       CLR           .eq       $0010   ; CLR - kasowanie wyswietlacza
+0011-            I    44       CLR1      .eq $0011 ; CLR1 - kasowanie wyswietlacza bez zmiany PWYS
+01D4-            I    45       PRINT       .eq $01D4   ; PRINT - drukuje komunikat z (HL)
+01D5-            I    46       PRINT1    .eq $01D5 ; PRINT1 - drukuje komunikat z (HL) bez zmiany PWYS
+01E0-            I    47       CO        .eq $01E0 ; CO - wyswietlenie cyfry hex
+01E1-            I    48       CO1       .eq $01E1 ; CO1 - wyswietlenie cyfry hex bez zmiany PWYS
+0018-            I    49       LBYTE       .eq $0018   ; LBYTE - wyswietlenie Aku w HEX
+001B-            I    50       LBYTE1    .eq $001B ; LBYTE1 - wyswietlenie Aku w HEX bez zmiany PWYS
+0020-            I    51       LADR      .eq $0020 ; LADR - wyswietlenie HL w HEX
+022D-            I    52       LADR1     .eq $022D ; LADR1 - wyswietlenie HL w HEX bez zmiany PWYS
+022D-            I    53       CZAS        .eq $022D   ; CZAS - pokazuje czas/date
+0000-            I    54             ;
+0000-            I    55             ; KLAWIATURA
+0000-            I    56             ;
+FFC3-            I    57       CSTS      .eq $FFC3 ; CSTS - test czy klawisz nacisniety
+FFC6-            I    58       CI        .eq $FFC6 ; CI - pobranie znaku z klawiatury
+0000-            I    59             ;
+0000-            I    60             ; KLAWIATURA I WYŒWIETLACZ
+0000-            I    61             ;
+0007-            I    62       TI        .eq $0007 ; TI - pobranie znaku z echem
+0008-            I    63       TI1       .eq $0008 ; TI1 - pobranie znaku z echem bez zmiany PWYS
+01F4-            I    64       PARAM     .eq $01F4 ; PARAM - pobranie liczby 16-bit do HL z echem
+01F5-            I    65       PARAM1    .eq $01F5 ; PARAM1 - pobranie liczby 16-bit do HL z echem bez zmiany PWYS
+01F8-            I    66       PARA1     .eq $01F8 ; PARA1 - pierwsz¹ cyfrê podajemy w akumulatorze a dalej jak PARAM1
+0213-            I    67       EXPR      .eq $0213 ; EXPR - pobranie ciagu liczb 16bit na stos
+0214-            I    68       EXPR1     .eq $0214 ; EXPR1 - pobranie ciagu liczb 16bit na stos bez zmiany PWYS
+0000-            I    69             ;
+0000-            I    70             ; POMOCNICZE
+0000-            I    71             ;
+023B-            I    72       HILO      .eq $023b ; HILO - iterator, HL++, CY = !(DE >= HL)
+0000-            I    73             ;
+00FF-            I    74       EOM       .eq $FF
+0000-                  7               .sm code                ;
+C000-                  8               .or $c000               ; U12/C000
+C000-                  9       .e_SDP
+C000-C3 5F C0         10 ( 10)         jp enable_SDP           ; ustaw Software Data Protection
+C003-                 11       .d_SDP
+C003-C3 7B C0         12 ( 10)         jp disable_SDP          ; odblokuj SDP
+C006-C3 33 C0         13 ( 10)         jp copy                ; kopiuj
+C009-                 14
+C009-                 15       .compare:                       ;porÃ³wnaj
+C009-31 66 FF         16 ( 10)         ld  SP,$ff66            ;
+C00C-01 00 20         17 ( 10)         ld BC,2000H             ; BC-licznik (8 kB)
+C00F-21 00 00         18 ( 10)         ld HL,0000H             ; adres oryginalu (U11)
+C012-11 00 40         19 ( 10)         ld DE,4000H             ; adres kopii (u10)
+C015-                 20       .next:
+C015-1A               21 (  7)         ld A,(DE)
+C016-13               22 (  6)         inc DE
+C017-ED A1            23 ( 16)         cpi
+C019-28 08            24 ( 7+)         jr Z,.equal
+C01B-C5               25 ( 11)         push BC
+C01C-2B               26 (  6)         dec HL
+C01D-CD 20 00         27 ( 17)         call LADR
+C020-44               28               .db 44h
+C021-23               29 (  6)         inc HL
+C022-C1               30 ( 10)         pop BC
+C023-                 31       .equal:
+C023-AF               32 (  4)         xor A
+C024-A8               33 (  4)         xor B
+C025-20 EE            34 ( 7+)         jr NZ,.next
+C027-A9               35 (  4)         xor C
+C028-20 EB            36 ( 7+)         jr NZ,.next
+C02A-C5               37 ( 11)         push BC
+C02B-E1               38 ( 10)         pop HL
+C02C-CD 20 00         39 ( 17)         call LADR
+C02F-44               40               .db 44h
+C030-                 41       .end:
+C030-76               42 (  4)         halt                        ; koniec zabawy. :-)
+C031-18 FD            43 ( 12)         jr .end
+C033-                 44
+C033-                 45       copy:
+C033-31 66 FF         46 ( 10)         ld  SP,$ff66                ;
+C036-01 00 20         47 ( 10)         ld BC,2000H                 ; BC-licznik (8 kB)
+C039-21 00 80         48 ( 10)         ld HL,8000H                 ; adres oryginalu (U11)
+C03C-11 00 40         49 ( 10)         ld DE,4000H                 ; adres kopii (u10)
+C03F-76               50 (  4)         halt                        ; <2ms (dla pewnosci, bo mozemy trafic tuz przed NMI)
+C040-                 51       .loop:
+C040-3E 40            52 (  7)         ld A,40h                    ; zapis 64 bajtÃ³w jednoczesnie
+C042-                 53       .loop1:
+C042-ED A0            54 ( 16)         ldi                             ; kopiuj bajt
+C044-3D               55 (  4)         dec A                       ; Tlbc (load byte cycle 200 ns max 150 us) - musimy sie spieszyc
+C045-20 FB            56 ( 7+)         jr nz,.loop1                ; czy juz 64?
+C047-A9               57 (  4)         xor C                       ; sprawdz czy koniec
+C048-20 03            58 ( 7+)         jr nz,.next                 ; jeszcze nie
+C04A-A8               59 (  4)         xor B
+C04B-28 0B            60 ( 7+)         jr z,end                    ; teraz tak
+C04D-                 61       .next:
+C04D-C5               62 ( 11)         push BC                     ;
+C04E-CD 20 00         63 ( 17)         call ladr                   ; pokaz HL
+C051-44               64               .db $44                     ;
+C052-C1               65 ( 10)         pop BC
+C053-76               66 (  4)         halt                        ; 2ms (nota katalogowa: czas zapisu MAX 5 ms)
+C054-76               67 (  4)         halt                        ; 2ms
+C055-76               68 (  4)         halt                        ; 2ms
+C056-18 E8            69 ( 12)         jr .loop                    ;
+C058-                 70       end:
+C058-CD 20 00         71 ( 17)         call ladr                   ; pokaz HL
+C05B-44               72               .db $44
+C05C-                 73       .end:
+C05C-76               74 (  4)         halt                        ; koniec zabawy. :-)
+C05D-18 FD            75 ( 12)         jr .end
+C05F-                 76               ;
+C05F-                 77       enable_SDP:
+C05F-31 66 FF         78 ( 10)         ld  SP,$ff66                ;
+C062-3E 55            79 (  7)         ld A,55H                    ;
+C064-21 55 55         80 ( 10)         ld HL,5555H                 ; adres
+C067-36 AA            81 ( 10)         ld (HL),0AAH                ; klucz
+C069-11 AA 4A         82 ( 10)         ld DE,4AAAH                 ; adres
+C06C-12               83 (  7)         ld (DE),A                   ; klucz
+C06D-36 A0            84 ( 10)         ld (HL),0A0H                ; klucz
+C06F-21 FF 5F         85 ( 10)         ld HL,5FFFH                 ; dowolny adres (ostatnia komÃ³rka)
+C072-36 FF            86 ( 10)         ld (HL),0FFH                ; w monitorze CA80 jest FF
+C074-CD 20 00         87 ( 17)         call ladr                   ; pokaÅ¼ HL
+C077-44               88               .db $44
+C078-                 89       .end:
+C078-76               90 (  4)         halt                        ; PamiÄ™Ä‡ juÅ¼ jest zabezpieczona
+C079-18 FD            91 ( 12)         jr .end
+C07B-                 92                       ;
+C07B-                 93       disable_SDP:
+C07B-31 66 FF         94 ( 10)         ld  SP,$ff66                ;
+C07E-3E 55            95 (  7)         ld A,55H
+C080-21 55 55         96 ( 10)         ld HL,5555H                 ; adres
+C083-36 AA            97 ( 10)         ld (HL),0AAH                ; klucz
+C085-11 AA 4A         98 ( 10)         ld DE,4AAAH                 ; adres
+C088-12               99 (  7)         ld (DE),A                   ; klucz
+C089-36 80           100 ( 10)         ld (HL),080H                ; klucz
+C08B-36 AA           101 ( 10)         ld (HL),0AAH                ; klucz
+C08D-12              102 (  7)         ld (DE),A                   ; klucz
+C08E-36 20           103 ( 10)         ld (HL),020H                ; klucz
+C090-21 FF 5F        104 ( 10)         ld HL,5FFFH                 ; dowolny adres (ostatnia komÃ³rka)
+C093-36 FF           105 ( 10)         ld (HL),0FFH                ; w monitorze CA80 jest FF
+C095-CD 20 00        106 ( 17)         call ladr                   ; pokaÅ¼ HL
+C098-44              107               .db $44
+C099-                108       .end:
+C099-76              109 (  4)         halt                        ; PamiÄ™Ä‡ juÅ¼ jest odbezpieczona
+C09A-18 FD           110 ( 12)         jr .end
