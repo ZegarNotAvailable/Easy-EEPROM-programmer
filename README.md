@@ -4,7 +4,7 @@
 - No additional harware needed.
 - 28C256 is too big, then I build simply burner.
 ## A few years ago I built a simple EEPROM programmer from a Z80-MBC2.
-[28C64 burner](https://github.com/ZegarNotAvailable/Easy-EEPROM-programmer/blob/main/Pictures/28C64-burner.jpg)
+![28C64 burner](https://github.com/ZegarNotAvailable/Easy-EEPROM-programmer/blob/main/Pictures/28C64-burner.jpg)
 ## Today I decided to make a similar one for RC2014.
 - The program allows you to transfer data to the AT28C256 memory (others have not been tested).
 - I use "page write mode" when possible. Otherwise "single byte mode".
