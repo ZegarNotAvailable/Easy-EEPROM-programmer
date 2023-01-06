@@ -34,3 +34,5 @@
 ## You can use breadboard instead of "CA80-bootloader".
 - Just connect D0...D7, CLK, RESET and power.
 - The description can be found in the code.
+## You can also burn 28C64 without any changes.
+- Note that addresses A13..A15 are invalid.
