@@ -19,7 +19,7 @@
 - I used the Z80-MBC2 software (by J4F), however, I made a lot of modifications and new features.
 - The code allows you to transfer data to the AT28C256 memory (others have not been tested).
 - I use "page write mode" when possible. Otherwise "single byte mode".
-- First sidable SDP.
+- First disable SDP.
 ![SDP disable](https://github.com/ZegarNotAvailable/Easy-EEPROM-programmer/blob/main/Pictures/SDP-disable.png)
 - HL register is a memory pointer.
 ![LD HL,addr](https://github.com/ZegarNotAvailable/Easy-EEPROM-programmer/blob/main/Pictures/LD-HL-addr.png)
