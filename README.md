@@ -13,7 +13,7 @@
     - Modify the U3 connections:
         1. isolate PIN1 and connect A14 there (e.g. to PIN3 U2)
         2. isolate PIN27 and connect to WR_ (e.g. to PIN29 U2)
-        3. PIN 20 connect to MREQ_ (e.g. in U3 connect PIN 22 to PIN30)
+        3. PIN 20 connect to MREQ_ (e.g. in U2 connect PIN 22 to PIN30)
         4. isolate PIN22 (OE_) and connect to +5V through a 10k resistor (pull up)
 ![Ready to use](https://github.com/ZegarNotAvailable/Easy-EEPROM-programmer/blob/main/Pictures/Burner-ready-to-use.jpg)
 - I used the Z80-MBC2 software (by J4F), however, I made a lot of modifications and new features.
@@ -28,5 +28,3 @@
 - Up to five HEX files with name format 8.3
 - In the 28C256.txt file, put the names without extensions separated by a space.
 ![Burning](https://github.com/ZegarNotAvailable/Easy-EEPROM-programmer/blob/main/Pictures/CA80-monitor-burning.png)
-
-
