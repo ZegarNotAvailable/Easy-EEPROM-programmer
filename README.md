@@ -25,11 +25,12 @@
 ![LD HL,addr](https://github.com/ZegarNotAvailable/Easy-EEPROM-programmer/blob/main/Pictures/LD-HL-addr.png)
 - The two instruction are "LD (HL),n" and "INC HL".
 ![LD (HL),data INC HL](https://github.com/ZegarNotAvailable/Easy-EEPROM-programmer/blob/main/Pictures/LD-M-data-INC-HL.png)
+- Burn a record (16 bytes) in page write mode.
 ![Burn record](https://github.com/ZegarNotAvailable/Easy-EEPROM-programmer/blob/main/Pictures/burn-record.png)
 ## User manual.
 - Just put the *.HEX (Intel HEX) files and the 28C256.txt file on the SD card.
 - Up to five HEX files with name format 8.3
-- In the 28C256.txt file, put the names without extensions separated by a space.
+- In the 28C256.txt file put the names without extensions separated by a space.
 ![Burning](https://github.com/ZegarNotAvailable/Easy-EEPROM-programmer/blob/main/Pictures/CA80-monitor-burning.png)
 ## You can use breadboard instead of "CA80-bootloader".
 - Just connect D0...D7, CLK, RESET and power.
