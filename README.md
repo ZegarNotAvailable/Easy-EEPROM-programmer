@@ -19,12 +19,18 @@
 - I used the Z80-MBC2 software (by J4F), however, I made a lot of modifications and new features.
 - The code allows you to transfer data to the AT28C256 memory (others have not been tested).
 - I use "page write mode" when possible. Otherwise "single byte mode".
+- First sidable SDP.
 ![SDP disable](https://github.com/ZegarNotAvailable/Easy-EEPROM-programmer/blob/main/Pictures/SDP-disable.png)
+- HL register is a memory pointer.
 ![LD HL,addr](https://github.com/ZegarNotAvailable/Easy-EEPROM-programmer/blob/main/Pictures/LD-HL-addr.png)
-![Burn record](https://github.com/ZegarNotAvailable/Easy-EEPROM-programmer/blob/main/Pictures/burn-record.png)
+- The two instruction are "LD (HL),n" and "INC HL".
 ![LD (HL),data INC HL](https://github.com/ZegarNotAvailable/Easy-EEPROM-programmer/blob/main/Pictures/LD-M-data-INC-HL.png)
+![Burn record](https://github.com/ZegarNotAvailable/Easy-EEPROM-programmer/blob/main/Pictures/burn-record.png)
 ## User manual.
 - Just put the *.HEX (Intel HEX) files and the 28C256.txt file on the SD card.
 - Up to five HEX files with name format 8.3
 - In the 28C256.txt file, put the names without extensions separated by a space.
 ![Burning](https://github.com/ZegarNotAvailable/Easy-EEPROM-programmer/blob/main/Pictures/CA80-monitor-burning.png)
+## You can use breadboard instead of "CA80-bootloader".
+- Just connect D0...D7, CLK, RESET and power.
+- The description can be found in the code.
