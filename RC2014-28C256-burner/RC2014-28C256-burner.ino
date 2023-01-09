@@ -21,11 +21,11 @@
 #define EXTENSION String(".HEX")
 #define SD_CS  4           // PB4 pin 5    SD SPI
 File myFile;
-char c;
-byte namesNumber;
-char fileNames[FILES_NUMBER][NAME_WIDTH];
-String fileName = "28C256.txt";
-byte burningTime = 10;      // See datasheet of EEPROM
+char          c;
+byte          namesNumber;
+char          fileNames[FILES_NUMBER][NAME_WIDTH];
+String        fileName = "28C256.txt";
+byte          burningTime = 10;      // See datasheet of EEPROM
 word          bytesBurned   = 0;
 
 // ------------------------------------------------------------------------------
@@ -89,6 +89,14 @@ const byte    LD_HL        =  0x36;       // Opcode of the Z80 instruction: LD(H
 const byte    INC_HL       =  0x23;       // Opcode of the Z80 instruction: INC HL
 const byte    LD_HLnn      =  0x21;       // Opcode of the Z80 instruction: LD HL, nn
 const byte    JP_nn        =  0xC3;       // Opcode of the Z80 instruction: JP nn
+
+void sendNopS(int NOPsToSend)
+{
+  for(int i = 0; i < NOPsToSend; i++)
+  {
+    sendNop();     //Z80 NOP 
+  }
+}
 
 void readFile(String fileName)
 {
@@ -160,6 +168,7 @@ void sendFilesFromSD()
 {
   byte j;
   Serial.println();
+  sendNopS(32);
   for (j = 0; j < namesNumber; j++)
   {
     fileName = String(String(fileNames[j]) + EXTENSION);
@@ -167,6 +176,7 @@ void sendFilesFromSD()
     {
       Serial.print(F("Burning "));
       Serial.println(fileName);
+      sendNopS(32);
       sendFileFromSD(fileName);
     }
     else
@@ -317,13 +327,13 @@ void setup()
   sendFilesFromSD();
   SDP_enable();
   unsigned long endTime = millis();
-  Serial.print("Burn ");
+  Serial.print(F("\r\nBurned "));
   Serial.print(bytesBurned);
-  Serial.println(" bytes");
-  Serial.print("Burning time: ");
+  Serial.println(F(" bytes"));
+  Serial.print(F("\r\nBurning time: "));
   Serial.print(endTime - startTime);
   Serial.println(" ms.");
-  Serial.println(" Done.");
+  Serial.println(F("\r\nDone."));
   digitalWrite(USER, HIGH);
 
 }
@@ -510,6 +520,18 @@ void SDP_disable()  //see datasheet of EEPROM
   burnByte(0xff);
   burnByte(0xff);
   bytesBurned -= 8;
+}
+
+void sendNop()
+{
+  // Execute the NOP instruction (T = 4). See the Z80 datasheet and manual.
+  pulseClock(1);                      // Execute the T1 cycle of M1 (Opcode Fetch machine cycle)
+  DDRA = 0xFF;                        // Configure Z80 data bus D0-D7 (PA0-PA7) as output
+  PORTA = 0;                          // Write "NOP" opcode on data bus
+  pulseClock(2);                      // Execute T2 and T3 cycles of M1
+  DDRA = 0x00;                        // Configure Z80 data bus D0-D7 (PA0-PA7) as input...
+  PORTA = 0xFF;                       // ...with pull-up
+  pulseClock(1);                      // Complete the execution of M1
 }
 
 void burnByte(byte value)
