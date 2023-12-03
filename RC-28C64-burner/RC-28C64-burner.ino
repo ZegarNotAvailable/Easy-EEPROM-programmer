@@ -25,7 +25,7 @@ char          c;
 byte          namesNumber;
 char          fileNames[FILES_NUMBER][NAME_WIDTH];
 String        fileName = "28C256.txt";
-byte          burningTime = 10;      // See datasheet of EEPROM
+byte          burningTime = 1;      // See datasheet of EEPROM
 word          bytesBurned   = 0;
 
 
@@ -347,9 +347,9 @@ void setup()
   digitalWrite(USER, LOW);
   unsigned long startTime = millis();
   readFile(fileName);
-  SDP_disable();
+  //SDP_disable();
   sendFilesFromSD();
-  SDP_enable();
+  //SDP_enable();
   unsigned long endTime = millis();
   Serial.print(F("\r\nBurned "));
   Serial.print(bytesBurned);
